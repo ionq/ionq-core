@@ -4,13 +4,13 @@ A client library for accessing IonQ Cloud Platform API.
 
 [![PyPI](https://img.shields.io/pypi/v/ionq-core.svg)](https://pypi.org/project/ionq-core/)
 [![Python versions](https://img.shields.io/pypi/pyversions/ionq-core.svg)](https://pypi.org/project/ionq-core/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/ionq/ionq-core-python/blob/main/LICENSE)
-[![CI](https://github.com/ionq/ionq-core-python/actions/workflows/ci.yml/badge.svg)](https://github.com/ionq/ionq-core-python/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-ionq.github.io-blue.svg)](https://ionq.github.io/ionq-core-python/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/ionq/ionq-core/blob/main/LICENSE)
+[![CI](https://github.com/ionq/ionq-core/actions/workflows/ci.yml/badge.svg)](https://github.com/ionq/ionq-core/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-ionq.github.io-blue.svg)](https://ionq.github.io/ionq-core/)
 
 `ionq-core` is a typed, async-capable Python client for the [IonQ Cloud Platform](https://ionq.com) REST API. The HTTP layer is generated from IonQ's OpenAPI specification with [`openapi-python-client`](https://github.com/openapi-generators/openapi-python-client); a small set of hand-written extensions wraps it with retries, polling, pagination, structured exceptions, and an extension API for downstream SDKs.
 
-The full API reference is published at [ionq.github.io/ionq-core-python](https://ionq.github.io/ionq-core-python/).
+The full API reference is published at [ionq.github.io/ionq-core](https://ionq.github.io/ionq-core/).
 
 ## Looking for a higher-level interface?
 
@@ -65,7 +65,7 @@ print(probs.additional_properties)
 
 Each generated endpoint module exposes four callables: `sync`, `sync_detailed`, `asyncio`, and `asyncio_detailed`. The `sync` and `asyncio` variants return the parsed body; the `_detailed` variants return a `Response[T]` with the status code, headers, and parsed body.
 
-For options (`api_key`, `base_url`, `max_retries`, `timeout`, `extension`), error classes, retry behavior, pagination, polling, sessions, and downstream-SDK extension hooks, see the [API reference](https://ionq.github.io/ionq-core-python/).
+For options (`api_key`, `base_url`, `max_retries`, `timeout`, `extension`), error classes, retry behavior, pagination, polling, sessions, and downstream-SDK extension hooks, see the [API reference](https://ionq.github.io/ionq-core/).
 
 ## Versioning
 
@@ -77,18 +77,18 @@ import ionq_core
 print(ionq_core.__version__)
 ```
 
-The full release history is in [CHANGELOG.md](https://github.com/ionq/ionq-core-python/blob/main/CHANGELOG.md).
+The full release history is in [CHANGELOG.md](https://github.com/ionq/ionq-core/blob/main/CHANGELOG.md).
 
 ## Contributing
 
-Most of `ionq_core/` is generated from the OpenAPI spec and overwritten on every regeneration. See [CONTRIBUTING.md](https://github.com/ionq/ionq-core-python/blob/main/CONTRIBUTING.md) for the boundary between generated and hand-written code, development setup, and the regeneration command.
+Most of `ionq_core/` is generated from the OpenAPI spec and overwritten on every regeneration. See [CONTRIBUTING.md](https://github.com/ionq/ionq-core/blob/main/CONTRIBUTING.md) for the boundary between generated and hand-written code, development setup, and the regeneration command.
 
 ## Support
 
-- Bug reports and feature requests: [GitHub Issues](https://github.com/ionq/ionq-core-python/issues)
-- Security disclosures: see [SECURITY.md](https://github.com/ionq/ionq-core-python/blob/main/SECURITY.md)
+- Bug reports and feature requests: [GitHub Issues](https://github.com/ionq/ionq-core/issues)
+- Security disclosures: see [SECURITY.md](https://github.com/ionq/ionq-core/blob/main/SECURITY.md)
 - Account, billing, or hardware-access questions: [ionq.com/contact](https://ionq.com/contact)
 
 ## License
 
-Apache License 2.0. See [LICENSE](https://github.com/ionq/ionq-core-python/blob/main/LICENSE).
+Apache License 2.0. See [LICENSE](https://github.com/ionq/ionq-core/blob/main/LICENSE).

@@ -1,6 +1,6 @@
 overlay: 1.0.0
 info:
-  title: ionq-core-python local OpenAPI fixes
+  title: ionq-core local OpenAPI fixes
   version: 0.3.0
   description: |
     Patches applied to openapi.json before client generation. The upstream

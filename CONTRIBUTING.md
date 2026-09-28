@@ -27,8 +27,8 @@ For non-trivial changes, open an issue first to confirm scope before investing s
 This project uses [`uv`](https://docs.astral.sh/uv/) for Python and dependency management; the `uv.lock` file is canonical and CI runs with `UV_FROZEN=true`.
 
 ```sh
-git clone https://github.com/ionq/ionq-core-python
-cd ionq-core-python
+git clone https://github.com/ionq/ionq-core
+cd ionq-core
 uv sync
 pre-commit install
 ```
