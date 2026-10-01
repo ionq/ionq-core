@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `NativeCircuitInput.qubits` and `JsonMultiCircuitInput.qubits` are now `int | Unset` (previously `float | Unset`), matching upstream's tightening to `format: int32, minimum: 1`. `QisCircuitInput.qubits` already had this type locally via the OpenAPI overlay; that overlay action has been removed now that upstream is correct natively.
 - Regenerated with `openapi-python-client` 0.29.0. Generated models now parse timestamps with the standard library (`datetime.fromisoformat`) instead of `dateutil.parser.isoparse`.
+- The GitHub repository moved from `ionq/ionq-core-python` to `ionq/ionq-core`, and the API reference from `ionq.github.io/ionq-core-python` to `ionq.github.io/ionq-core`. GitHub redirects the old repository URL; the old docs URL does not redirect. The PyPI package name (`ionq-core`) and import path (`ionq_core`) are unchanged.
 
 ### Removed
 
@@ -56,6 +57,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Typed `attrs` request and response models with `from_dict()` / `to_dict()` and an `Unset` sentinel that distinguishes "not provided" from `None`.
 - Python 3.12 - 3.14 support, `py.typed` marker, Apache-2.0 license.
 
-[Unreleased]: https://github.com/ionq/ionq-core-python/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/ionq/ionq-core-python/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/ionq/ionq-core-python/releases/tag/v0.1.0
+[Unreleased]: https://github.com/ionq/ionq-core/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/ionq/ionq-core/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/ionq/ionq-core/releases/tag/v0.1.0
