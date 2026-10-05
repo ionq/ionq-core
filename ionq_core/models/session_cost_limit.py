@@ -12,6 +12,7 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
 
 
 
@@ -26,29 +27,30 @@ T = TypeVar("T", bound="SessionCostLimit")
 class SessionCostLimit:
     """ 
         Attributes:
-            unit (str):
             value (float):
+            unit (str | Unset):
      """
 
-    unit: str
     value: float
+    unit: str | Unset = UNSET
 
 
 
 
 
     def to_dict(self) -> dict[str, Any]:
-        unit = self.unit
-
         value = self.value
+
+        unit = self.unit
 
 
         field_dict: dict[str, Any] = {}
 
         field_dict.update({
-            "unit": unit,
             "value": value,
         })
+        if unit is not UNSET:
+            field_dict["unit"] = unit
 
         return field_dict
 
@@ -57,13 +59,13 @@ class SessionCostLimit:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        unit = d.pop("unit")
-
         value = d.pop("value")
 
+        unit = d.pop("unit", UNSET)
+
         session_cost_limit = cls(
-            unit=unit,
             value=value,
+            unit=unit,
         )
 
         return session_cost_limit

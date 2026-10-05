@@ -23,7 +23,6 @@ from .circuit_formats_catalog import CircuitFormatsCatalog
 from .circuit_job_compilation_settings import CircuitJobCompilationSettings
 from .circuit_job_creation_payload import CircuitJobCreationPayload
 from .circuit_job_creation_payload_settings import CircuitJobCreationPayloadSettings
-from .circuit_job_creation_payload_settings_compilation import CircuitJobCreationPayloadSettingsCompilation
 from .circuit_job_creation_payload_settings_error_mitigation import CircuitJobCreationPayloadSettingsErrorMitigation
 from .circuit_job_creation_payload_type import CircuitJobCreationPayloadType
 from .circuit_job_error_mitigation_settings import CircuitJobErrorMitigationSettings
@@ -33,7 +32,6 @@ from .circuit_job_settings import CircuitJobSettings
 from .circuit_job_stats import CircuitJobStats
 from .clone_job_payload import CloneJobPayload
 from .clone_job_payload_settings import CloneJobPayloadSettings
-from .clone_job_payload_settings_compilation import CloneJobPayloadSettingsCompilation
 from .clone_job_payload_settings_error_mitigation import CloneJobPayloadSettingsErrorMitigation
 from .compilation_output import CompilationOutput
 from .compiled_circuits import CompiledCircuits
@@ -96,7 +94,6 @@ from .json_multi_circuit_input import JsonMultiCircuitInput
 from .json_multi_circuit_input_gateset import JsonMultiCircuitInputGateset
 from .json_multi_circuit_job import JSONMultiCircuitJob
 from .json_multi_circuit_job_settings import JSONMultiCircuitJobSettings
-from .json_multi_circuit_job_settings_compilation import JSONMultiCircuitJobSettingsCompilation
 from .json_multi_circuit_job_settings_error_mitigation import JSONMultiCircuitJobSettingsErrorMitigation
 from .json_multi_circuit_job_type import JSONMultiCircuitJobType
 from .json_object import JsonObject
@@ -114,7 +111,6 @@ from .noise import Noise
 from .number_map import NumberMap
 from .partial_base_child_job_creation_payload import PartialBaseChildJobCreationPayload
 from .partial_base_child_job_creation_payload_settings import PartialBaseChildJobCreationPayloadSettings
-from .partial_base_child_job_creation_payload_settings_compilation import PartialBaseChildJobCreationPayloadSettingsCompilation
 from .partial_base_child_job_creation_payload_settings_error_mitigation import PartialBaseChildJobCreationPayloadSettingsErrorMitigation
 from .qaoa_job import QaoaJob
 from .qaoa_job_results import QaoaJobResults
@@ -196,7 +192,6 @@ __all__ = (
     "CircuitJobCompilationSettings",
     "CircuitJobCreationPayload",
     "CircuitJobCreationPayloadSettings",
-    "CircuitJobCreationPayloadSettingsCompilation",
     "CircuitJobCreationPayloadSettingsErrorMitigation",
     "CircuitJobCreationPayloadType",
     "CircuitJobErrorMitigationSettings",
@@ -206,7 +201,6 @@ __all__ = (
     "CircuitJobStats",
     "CloneJobPayload",
     "CloneJobPayloadSettings",
-    "CloneJobPayloadSettingsCompilation",
     "CloneJobPayloadSettingsErrorMitigation",
     "CompilationOutput",
     "CompiledCircuits",
@@ -269,7 +263,6 @@ __all__ = (
     "JsonMultiCircuitInputGateset",
     "JSONMultiCircuitJob",
     "JSONMultiCircuitJobSettings",
-    "JSONMultiCircuitJobSettingsCompilation",
     "JSONMultiCircuitJobSettingsErrorMitigation",
     "JSONMultiCircuitJobType",
     "JsonObject",
@@ -287,7 +280,6 @@ __all__ = (
     "NumberMap",
     "PartialBaseChildJobCreationPayload",
     "PartialBaseChildJobCreationPayloadSettings",
-    "PartialBaseChildJobCreationPayloadSettingsCompilation",
     "PartialBaseChildJobCreationPayloadSettingsErrorMitigation",
     "QaoaJob",
     "QaoaJobResults",
