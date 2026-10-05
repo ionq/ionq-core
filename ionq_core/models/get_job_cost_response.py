@@ -32,7 +32,8 @@ class GetJobCostResponse:
     """ 
         Attributes:
             dry_run (bool):
-            estimated_cost (GetJobCostResponseEstimatedCost | Unset):
+            estimated_cost (GetJobCostResponseEstimatedCost | Unset): Omitted for jobs that are never priced against a
+                contract. Free targets such as simulators have no currency unit that can describe them.
             cost (GetJobCostResponseCost | Unset):
      """
 

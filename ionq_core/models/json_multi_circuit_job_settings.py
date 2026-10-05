@@ -16,7 +16,6 @@ from ..types import UNSET, Unset
 from typing import cast
 
 if TYPE_CHECKING:
-  from ..models.json_multi_circuit_job_settings_compilation import JSONMultiCircuitJobSettingsCompilation
   from ..models.json_multi_circuit_job_settings_error_mitigation import JSONMultiCircuitJobSettingsErrorMitigation
 
 
@@ -33,11 +32,9 @@ class JSONMultiCircuitJobSettings:
         Attributes:
             error_mitigation (JSONMultiCircuitJobSettingsErrorMitigation | Unset): To turn on debiasing, you must request at
                 least 500 shots
-            compilation (JSONMultiCircuitJobSettingsCompilation | Unset):
      """
 
     error_mitigation: JSONMultiCircuitJobSettingsErrorMitigation | Unset = UNSET
-    compilation: JSONMultiCircuitJobSettingsCompilation | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
 
@@ -45,15 +42,10 @@ class JSONMultiCircuitJobSettings:
 
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.json_multi_circuit_job_settings_compilation import JSONMultiCircuitJobSettingsCompilation
         from ..models.json_multi_circuit_job_settings_error_mitigation import JSONMultiCircuitJobSettingsErrorMitigation
         error_mitigation: dict[str, Any] | Unset = UNSET
         if not isinstance(self.error_mitigation, Unset):
             error_mitigation = self.error_mitigation.to_dict()
-
-        compilation: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.compilation, Unset):
-            compilation = self.compilation.to_dict()
 
 
         field_dict: dict[str, Any] = {}
@@ -62,8 +54,6 @@ class JSONMultiCircuitJobSettings:
         })
         if error_mitigation is not UNSET:
             field_dict["error_mitigation"] = error_mitigation
-        if compilation is not UNSET:
-            field_dict["compilation"] = compilation
 
         return field_dict
 
@@ -71,7 +61,6 @@ class JSONMultiCircuitJobSettings:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.json_multi_circuit_job_settings_compilation import JSONMultiCircuitJobSettingsCompilation
         from ..models.json_multi_circuit_job_settings_error_mitigation import JSONMultiCircuitJobSettingsErrorMitigation
         d = dict(src_dict)
         _error_mitigation = d.pop("error_mitigation", UNSET)
@@ -84,19 +73,8 @@ class JSONMultiCircuitJobSettings:
 
 
 
-        _compilation = d.pop("compilation", UNSET)
-        compilation: JSONMultiCircuitJobSettingsCompilation | Unset
-        if isinstance(_compilation,  Unset):
-            compilation = UNSET
-        else:
-            compilation = JSONMultiCircuitJobSettingsCompilation.from_dict(_compilation)
-
-
-
-
         json_multi_circuit_job_settings = cls(
             error_mitigation=error_mitigation,
-            compilation=compilation,
         )
 
 
