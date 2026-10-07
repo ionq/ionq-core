@@ -29,10 +29,10 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://ionq.com"
-Documentation = "https://ionq.github.io/ionq-core-python/"
-Repository = "https://github.com/ionq/ionq-core-python"
-Changelog = "https://github.com/ionq/ionq-core-python/blob/main/CHANGELOG.md"
-Issues = "https://github.com/ionq/ionq-core-python/issues"
+Documentation = "https://ionq.github.io/ionq-core/"
+Repository = "https://github.com/ionq/ionq-core"
+Changelog = "https://github.com/ionq/ionq-core/blob/main/CHANGELOG.md"
+Issues = "https://github.com/ionq/ionq-core/issues"
 
 [dependency-groups]
 dev = [

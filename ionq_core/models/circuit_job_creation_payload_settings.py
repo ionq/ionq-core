@@ -16,7 +16,6 @@ from ..types import UNSET, Unset
 from typing import cast
 
 if TYPE_CHECKING:
-  from ..models.circuit_job_creation_payload_settings_compilation import CircuitJobCreationPayloadSettingsCompilation
   from ..models.circuit_job_creation_payload_settings_error_mitigation import CircuitJobCreationPayloadSettingsErrorMitigation
 
 
@@ -33,11 +32,9 @@ class CircuitJobCreationPayloadSettings:
         Attributes:
             error_mitigation (CircuitJobCreationPayloadSettingsErrorMitigation | Unset): To turn on debiasing, you must
                 request at least 500 shots
-            compilation (CircuitJobCreationPayloadSettingsCompilation | Unset):
      """
 
     error_mitigation: CircuitJobCreationPayloadSettingsErrorMitigation | Unset = UNSET
-    compilation: CircuitJobCreationPayloadSettingsCompilation | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
 
@@ -45,15 +42,10 @@ class CircuitJobCreationPayloadSettings:
 
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.circuit_job_creation_payload_settings_compilation import CircuitJobCreationPayloadSettingsCompilation
         from ..models.circuit_job_creation_payload_settings_error_mitigation import CircuitJobCreationPayloadSettingsErrorMitigation
         error_mitigation: dict[str, Any] | Unset = UNSET
         if not isinstance(self.error_mitigation, Unset):
             error_mitigation = self.error_mitigation.to_dict()
-
-        compilation: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.compilation, Unset):
-            compilation = self.compilation.to_dict()
 
 
         field_dict: dict[str, Any] = {}
@@ -62,8 +54,6 @@ class CircuitJobCreationPayloadSettings:
         })
         if error_mitigation is not UNSET:
             field_dict["error_mitigation"] = error_mitigation
-        if compilation is not UNSET:
-            field_dict["compilation"] = compilation
 
         return field_dict
 
@@ -71,7 +61,6 @@ class CircuitJobCreationPayloadSettings:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.circuit_job_creation_payload_settings_compilation import CircuitJobCreationPayloadSettingsCompilation
         from ..models.circuit_job_creation_payload_settings_error_mitigation import CircuitJobCreationPayloadSettingsErrorMitigation
         d = dict(src_dict)
         _error_mitigation = d.pop("error_mitigation", UNSET)
@@ -84,19 +73,8 @@ class CircuitJobCreationPayloadSettings:
 
 
 
-        _compilation = d.pop("compilation", UNSET)
-        compilation: CircuitJobCreationPayloadSettingsCompilation | Unset
-        if isinstance(_compilation,  Unset):
-            compilation = UNSET
-        else:
-            compilation = CircuitJobCreationPayloadSettingsCompilation.from_dict(_compilation)
-
-
-
-
         circuit_job_creation_payload_settings = cls(
             error_mitigation=error_mitigation,
-            compilation=compilation,
         )
 
 
