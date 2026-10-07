@@ -24,7 +24,9 @@ T = TypeVar("T", bound="GetJobCostResponseEstimatedCost")
 
 @_attrs_define
 class GetJobCostResponseEstimatedCost:
-    """ 
+    """ Omitted for jobs that are never priced against a contract. Free targets such as simulators have no currency unit
+    that can describe them.
+
         Attributes:
             value (float):  Example: 24.83.
             unit (str): The currency code the cost is denominated in. `credit` is used instead for organizations billed in

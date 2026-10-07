@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- `get_job_cost` no longer raises `KeyError: 'estimated_cost'` parsing a cost response: the API omits `estimated_cost` from some responses (observed for simulator jobs) although the spec marks it required, so `GetJobCostResponse.estimated_cost` is now `GetJobCostResponseEstimatedCost | Unset`.
 - `estimate_job_cost` no longer raises `KeyError` parsing a successful estimate: `GetJobEstimateResponse` now matches the shape the API actually serves (`estimate_context`, `rate_card`, `estimated_unit`, `estimated_total_cost`) via the OpenAPI overlay, replacing the stale `input_values` / `rate_information` / `cost_unit` / `estimated_cost` shape. Adds the `GetJobEstimateContext`, `RateCardEntry`, and `GetJobEstimateResponseRateCard` models; removes `GetJobEstimateResponseRateInformation`.
 - `get_usages` no longer raises `ValueError: badly formed hexadecimal UUID string`: organization ids are not UUIDs, so the `organization_id` path parameter and the `Usages.organization` response field are now plain `str` (previously `UUID`) via the OpenAPI overlay.
 - `get_usages` no longer raises `ValueError: Invalid isoformat string` parsing `usage_data`: the API returns RFC 3339 date-times for `Usage.from`, so the field is now `datetime.datetime` (previously `datetime.date`) via the OpenAPI overlay.
@@ -25,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `NativeCircuitInput.qubits` and `JsonMultiCircuitInput.qubits` are now `int | Unset` (previously `float | Unset`), matching upstream's tightening to `format: int32, minimum: 1`. `QisCircuitInput.qubits` already had this type locally via the OpenAPI overlay; that overlay action has been removed now that upstream is correct natively.
 - Regenerated with `openapi-python-client` 0.29.0. Generated models now parse timestamps with the standard library (`datetime.fromisoformat`) instead of `dateutil.parser.isoparse`.
+- The GitHub repository moved from `ionq/ionq-core-python` to `ionq/ionq-core`, and the API reference from `ionq.github.io/ionq-core-python` to `ionq.github.io/ionq-core`. GitHub redirects the old repository URL; the old docs URL does not redirect. The PyPI package name (`ionq-core`) and import path (`ionq_core`) are unchanged.
 
 ### Removed
 
@@ -55,6 +57,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Typed `attrs` request and response models with `from_dict()` / `to_dict()` and an `Unset` sentinel that distinguishes "not provided" from `None`.
 - Python 3.12 - 3.14 support, `py.typed` marker, Apache-2.0 license.
 
-[Unreleased]: https://github.com/ionq/ionq-core-python/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/ionq/ionq-core-python/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/ionq/ionq-core-python/releases/tag/v0.1.0
+[Unreleased]: https://github.com/ionq/ionq-core/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/ionq/ionq-core/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/ionq/ionq-core/releases/tag/v0.1.0

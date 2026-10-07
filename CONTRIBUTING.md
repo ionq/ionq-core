@@ -27,8 +27,8 @@ For non-trivial changes, open an issue first to confirm scope before investing s
 This project uses [`uv`](https://docs.astral.sh/uv/) for Python and dependency management; the `uv.lock` file is canonical and CI runs with `UV_FROZEN=true`.
 
 ```sh
-git clone https://github.com/ionq/ionq-core-python
-cd ionq-core-python
+git clone https://github.com/ionq/ionq-core
+cd ionq-core
 uv sync
 pre-commit install
 ```
@@ -72,7 +72,7 @@ uv run --group regen python scripts/regenerate_models.py --sync-spec   # fetch t
 
 [`scripts/regenerate_models.py`](scripts/regenerate_models.py) is the single source of truth for the generation command and works on any OS (`make regen` / `make sync-spec` wrap it); the [`generated`](.github/workflows/generated.yml) workflow runs it on every PR across Linux, macOS, and Windows and verifies that the committed output is current. Post-generation hooks (in `openapi-python-client-config.yaml`) inject SPDX/`@generated` headers, hide the `AuthenticatedClient.token` from `repr`, and run `ruff` fix-and-format.
 
-Commit the regenerated files alongside the spec or template change that caused them. Spec drift is checked weekly by [`spec-drift.yml`](.github/workflows/spec-drift.yml), which opens an issue if `openapi.json` falls behind upstream.
+Commit the regenerated files alongside the spec or template change that caused them. Spec drift is handled weekly by [`spec-sync.yml`](.github/workflows/spec-sync.yml), which opens a regeneration PR carrying the spec diff and merges it once all required checks pass.
 
 ## Pull request workflow
 
@@ -84,7 +84,7 @@ Commit the regenerated files alongside the spec or template change that caused t
 
 There is no enforced commit-message format, but PR titles become release notes via `gh release create --generate-notes`. Write each title as the line you would want to see in a changelog: imperative mood, user-facing, no leading ticket number.
 
-User-visible changes should also be reflected in [CHANGELOG.md](CHANGELOG.md) under the next release section, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
+User-visible changes should also be reflected in [CHANGELOG.md](CHANGELOG.md) under the next release section, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Automated `spec-sync` PRs are the exception: they merge without an entry, and the release author writes entries for them from the merged `spec-drift`-labeled PRs, whose bodies carry each spec diff.
 
 ## Contributor License Agreement
 

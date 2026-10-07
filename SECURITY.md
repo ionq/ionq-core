@@ -4,7 +4,7 @@
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
-Email [security@ionq.co](mailto:security@ionq.co) with the subject line `[ionq-core-python]`.
+Email [security@ionq.co](mailto:security@ionq.co) with the subject line `[ionq-core]`.
 
 Please include enough detail to reproduce the issue, and redact your API key from any logs or response payloads you share.
 
