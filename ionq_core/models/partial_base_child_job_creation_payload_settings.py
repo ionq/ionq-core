@@ -16,7 +16,6 @@ from ..types import UNSET, Unset
 from typing import cast
 
 if TYPE_CHECKING:
-  from ..models.partial_base_child_job_creation_payload_settings_compilation import PartialBaseChildJobCreationPayloadSettingsCompilation
   from ..models.partial_base_child_job_creation_payload_settings_error_mitigation import PartialBaseChildJobCreationPayloadSettingsErrorMitigation
 
 
@@ -32,11 +31,9 @@ class PartialBaseChildJobCreationPayloadSettings:
     """ 
         Attributes:
             error_mitigation (PartialBaseChildJobCreationPayloadSettingsErrorMitigation | Unset):
-            compilation (PartialBaseChildJobCreationPayloadSettingsCompilation | Unset):
      """
 
     error_mitigation: PartialBaseChildJobCreationPayloadSettingsErrorMitigation | Unset = UNSET
-    compilation: PartialBaseChildJobCreationPayloadSettingsCompilation | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
 
@@ -44,15 +41,10 @@ class PartialBaseChildJobCreationPayloadSettings:
 
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.partial_base_child_job_creation_payload_settings_compilation import PartialBaseChildJobCreationPayloadSettingsCompilation
         from ..models.partial_base_child_job_creation_payload_settings_error_mitigation import PartialBaseChildJobCreationPayloadSettingsErrorMitigation
         error_mitigation: dict[str, Any] | Unset = UNSET
         if not isinstance(self.error_mitigation, Unset):
             error_mitigation = self.error_mitigation.to_dict()
-
-        compilation: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.compilation, Unset):
-            compilation = self.compilation.to_dict()
 
 
         field_dict: dict[str, Any] = {}
@@ -61,8 +53,6 @@ class PartialBaseChildJobCreationPayloadSettings:
         })
         if error_mitigation is not UNSET:
             field_dict["error_mitigation"] = error_mitigation
-        if compilation is not UNSET:
-            field_dict["compilation"] = compilation
 
         return field_dict
 
@@ -70,7 +60,6 @@ class PartialBaseChildJobCreationPayloadSettings:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.partial_base_child_job_creation_payload_settings_compilation import PartialBaseChildJobCreationPayloadSettingsCompilation
         from ..models.partial_base_child_job_creation_payload_settings_error_mitigation import PartialBaseChildJobCreationPayloadSettingsErrorMitigation
         d = dict(src_dict)
         _error_mitigation = d.pop("error_mitigation", UNSET)
@@ -83,19 +72,8 @@ class PartialBaseChildJobCreationPayloadSettings:
 
 
 
-        _compilation = d.pop("compilation", UNSET)
-        compilation: PartialBaseChildJobCreationPayloadSettingsCompilation | Unset
-        if isinstance(_compilation,  Unset):
-            compilation = UNSET
-        else:
-            compilation = PartialBaseChildJobCreationPayloadSettingsCompilation.from_dict(_compilation)
-
-
-
-
         partial_base_child_job_creation_payload_settings = cls(
             error_mitigation=error_mitigation,
-            compilation=compilation,
         )
 
 
