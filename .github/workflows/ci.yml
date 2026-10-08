@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-uv
+      - uses: $/.github/actions/setup-uv
         with:
           enable-cache: ${{ github.event_name == 'push' }}
       - run: uv sync
@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-uv
+      - uses: $/.github/actions/setup-uv
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: ${{ github.event_name == 'push' }}
@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-uv
+      - uses: $/.github/actions/setup-uv
         with:
           enable-cache: ${{ github.event_name == 'push' }}
       - run: uvx pip-audit --require-hashes --strict -r <(uv pip compile pyproject.toml --generate-hashes)

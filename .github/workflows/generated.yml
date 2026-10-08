@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-uv
+      - uses: $/.github/actions/setup-uv
       - name: Regenerate client
         run: uv run --group regen python scripts/regenerate_models.py
       # Windows only proves regeneration runs: openapi-python-client writes

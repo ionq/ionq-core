@@ -38,7 +38,7 @@ jobs:
             } > /tmp/pr-body.md
           fi
       - if: steps.drift.outputs.drifted == 'true'
-        uses: ./.github/actions/setup-uv
+        uses: $/.github/actions/setup-uv
       - name: Regenerate client
         if: steps.drift.outputs.drifted == 'true'
         run: |
