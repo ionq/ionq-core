@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-10-19
+
 ### Added
 
 - `move_job` (`POST /jobs/{UUID}/move`) and `get_format_schema` (`GET /schemas/formats/{format}`, under `ionq_core.api.schemas`) endpoints.
@@ -63,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Typed `attrs` request and response models with `from_dict()` / `to_dict()` and an `Unset` sentinel that distinguishes "not provided" from `None`.
 - Python 3.12 - 3.14 support, `py.typed` marker, Apache-2.0 license.
 
-[Unreleased]: https://github.com/ionq/ionq-core/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/ionq/ionq-core/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/ionq/ionq-core/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/ionq/ionq-core/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/ionq/ionq-core/releases/tag/v0.1.0
