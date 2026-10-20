@@ -32,8 +32,11 @@ jobs:
     permissions:
       id-token: write # federate to octo-sts
     steps:
+      # Advisory for now: neither step can fail the job, so an outage here never holds a PR
+      # or a release. Remove both `continue-on-error` lines to make the check blocking.
       - name: Get a token for cloud-pact Actions
         id: sts
+        continue-on-error: true
         uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
         with:
           domain: octo-sts.gh.ionq.co
@@ -41,6 +44,8 @@ jobs:
           identity: ionq-core-pact
 
       - name: Run in cloud-pact and wait for its verdict
+        if: ${{ steps.sts.outcome == 'success' }}
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ steps.sts.outputs.token }}
           SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -79,6 +84,5 @@ jobs:
           conclusion=$(gh run view "$run_id" -R "$TARGET" --json conclusion --jq .conclusion)
           echo "cloud-pact verdict: $conclusion"
           if [ "$conclusion" = success ] || [ "$conclusion" = skipped ]; then exit 0; fi
-          # Advisory for now; swap the two lines below to make it blocking.
           echo "::warning::cloud-pact check did not pass ($conclusion): https://github.com/$TARGET/actions/runs/$run_id"
-          # exit 1
+          exit 1
