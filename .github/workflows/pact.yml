@@ -1,0 +1,88 @@
+name: Pact — consumer contracts
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+    inputs:
+      mode:
+        description: check | can-i-release | record-release
+        required: false
+        default: check
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  contracts:
+    name: contracts (cloud-pact)
+    # Fork PRs cannot federate, so they skip.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      id-token: write # federate to octo-sts
+    steps:
+      # Advisory for now: neither step can fail the job, so an outage here never holds a PR
+      # or a release. Remove both `continue-on-error` lines to make the check blocking.
+      - name: Get a token for cloud-pact Actions
+        id: sts
+        continue-on-error: true
+        uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
+        with:
+          domain: octo-sts.gh.ionq.co
+          scope: ionq/cloud-pact
+          identity: ionq-core-pact
+
+      - name: Run in cloud-pact and wait for its verdict
+        if: ${{ steps.sts.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ steps.sts.outputs.token }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+          RUN_KEY: ionq-core-${{ github.run_id }}-${{ github.run_attempt }}
+          MODE: ${{ inputs.mode || 'check' }}
+          RELEASE_TAG: ${{ inputs.mode && inputs.mode != 'check' && github.ref_name || '' }}
+          TARGET: ionq/cloud-pact
+          WORKFLOW: ionq-core-contracts.yaml
+        run: |
+          gh workflow run "$WORKFLOW" -R "$TARGET" --ref main \
+            -f sha="$SHA" -f branch="$BRANCH" -f run_key="$RUN_KEY" \
+            -f mode="$MODE" -f release_tag="$RELEASE_TAG"
+
+          # The dispatch returns no run id; the run is found by its title.
+          run_id=""
+          for _ in $(seq 1 24); do
+            sleep 5
+            run_id=$(gh run list -R "$TARGET" --workflow "$WORKFLOW" --event workflow_dispatch \
+              --limit 30 --json databaseId,displayTitle \
+              | jq -r --arg key "$RUN_KEY" '[.[] | select(.displayTitle | endswith($key))][0].databaseId // empty')
+            [ -n "$run_id" ] && break
+          done
+          if [ -z "$run_id" ]; then
+            echo "::error::cloud-pact did not start a run for $RUN_KEY"
+            exit 1
+          fi
+          echo "cloud-pact run: https://github.com/$TARGET/actions/runs/$run_id"
+
+          # Poll the status only; the remote log stays remote.
+          while :; do
+            status=$(gh run view "$run_id" -R "$TARGET" --json status --jq .status)
+            [ "$status" = completed ] && break
+            sleep 20
+          done
+          conclusion=$(gh run view "$run_id" -R "$TARGET" --json conclusion --jq .conclusion)
+          echo "cloud-pact verdict: $conclusion"
+          if [ "$conclusion" = success ] || [ "$conclusion" = skipped ]; then exit 0; fi
+          echo "::warning::cloud-pact check did not pass ($conclusion): https://github.com/$TARGET/actions/runs/$run_id"
+          exit 1
