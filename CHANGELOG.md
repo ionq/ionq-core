@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- `repr()` of `Client` and `AuthenticatedClient`, including one returned by `IonQClient`, no longer shows the `headers` field, which held the API key once the client had made a request, so printing or logging a client no longer exposes the key.
+
 ## [0.2.0] - 2026-10-19
 
 ### Added
