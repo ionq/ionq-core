@@ -22,7 +22,7 @@ def main() -> None:
         re.sub(
             r"(token: str)$",
             r"\1 = field(repr=False)",
-            client_file.read_text(encoding="utf-8"),
+            client_file.read_text(encoding="utf-8").replace('alias="headers")', 'alias="headers", repr=False)'),
             flags=re.MULTILINE,
         ),
         encoding="utf-8",

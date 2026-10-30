@@ -75,6 +75,7 @@ class TestIonQClient:
 
     def test_token_not_in_repr(self):
         c = IonQClient(api_key="super-secret-key")
+        c.get_httpx_client()
         assert "super-secret-key" not in repr(c)
 
     def test_http_base_url_warns(self):
