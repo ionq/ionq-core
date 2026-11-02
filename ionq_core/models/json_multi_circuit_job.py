@@ -44,7 +44,7 @@ class JSONMultiCircuitJob:
                 'targets': [0, 1], 'phases': [0, 0.25]}, {'gate': 'gpi2', 'target': 0, 'phase': 0.75}]}]}}
 
         Attributes:
-            backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`
+            backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`, `qpu.forte-enterprise-3`
             type_ (JSONMultiCircuitJobType):
             input_ (JsonMultiCircuitInput):
             name (str | Unset):

@@ -72,7 +72,7 @@ class QuantumFunctionJob:
             results (None | QuantumFunctionJobResults): Scalar metrics emitted by the quantum-function implementation — the
                 expectation value of the observable (`value`) and its estimated variance across the shot ensemble (`variance`).
             child_job_ids (list[str] | None):
-            shots (int | Unset): `shots` are not included with ideal simulator backend.
+            shots (int | Unset): `shots` are not included with the ideal simulator backend.
             noise (Noise | Unset):
             cost_model (ApiCostModel | Unset): The billing model used for this job. `QCT` for jobs billed on quantum
                 compute time, `2QGE_operations` for jobs billed on two-qubit gate operations.

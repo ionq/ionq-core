@@ -56,8 +56,8 @@ class ResultFormatsCatalog:
                 Array of decimal qubit state integer strings, one element per shot. Example: ['2', '1', '3', '0'].
             ionq_result_shots_json_v2 (IonqResultShotsJsonV2): `ionq.result.shots.json.v2` — Per-shot register outcomes.
                 Each shot
-                records measured bit arrays for every named register. Example: {'shots': [{'registers': {'output_all': [1, 0]}},
-                {'registers': {'output_all': [0, 1]}}]}.
+                records measured bit arrays for every named register. Example: {'shots': [{'registers': {'output_all': [1, 0]},
+                'leakage_bits': []}, {'registers': {'output_all': [0, 1]}, 'leakage_bits': [1, 0]}]}.
             ionq_result_probabilities_aggregate_json_v1 (IonqResultProbabilitiesAggregateJsonV1):
                 `ionq.result.probabilities-aggregate.json.v1` — Aggregated probability
                 distributions across all circuits in an `ionq.multi-circuit.v1` job. Top-level

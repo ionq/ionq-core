@@ -37,7 +37,7 @@ T = TypeVar("T", bound="CircuitJobCreationPayload")
 class CircuitJobCreationPayload:
     """ 
         Attributes:
-            backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`
+            backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`, `qpu.forte-enterprise-3`
             type_ (CircuitJobCreationPayloadType):
             input_ (NativeCircuitInput | QASM3Circuit | QisCircuitInput): Every input shape a single-circuit job can carry.
                 QIS and native circuits

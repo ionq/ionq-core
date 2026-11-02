@@ -28,7 +28,7 @@ class SessionCostLimit:
     """ 
         Attributes:
             value (float):
-            unit (str | Unset):
+            unit (str | Unset): An ISO 4217 currency code, case-insensitive; other units are rejected.
      """
 
     value: float
