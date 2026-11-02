@@ -1,6 +1,6 @@
 # cloud-pact contracts action
 
-Dispatches a contracts receiver workflow hosted in `ionq/cloud-pact` for a commit of the
+Dispatches a contracts receiver workflow hosted in `ionq/pact` for a commit of the
 calling repo, finds the resulting run by a correlation key, polls it, and ends with the same
 verdict. Every wait takes an explicit bound, so the step fails cleanly instead of hanging
 when the remote run never starts or never finishes.
@@ -19,7 +19,7 @@ steps:
     uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
     with:
       domain: octo-sts.gh.ionq.co
-      scope: ionq/cloud-pact
+      scope: ionq/pact
       identity: ionq-core-pact
 
   - uses: $/.github/actions/cloud-pact-contracts # other repos: ionq/ionq-core/.github/actions/cloud-pact-contracts@<sha>

@@ -40,7 +40,7 @@ inputs:
   repository:
     description: Repository hosting the contracts workflow.
     required: false
-    default: ionq/cloud-pact
+    default: ionq/pact
   ref:
     description: Ref of the target repository to run the workflow from.
     required: false
