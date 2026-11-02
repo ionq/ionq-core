@@ -27,8 +27,7 @@ T = TypeVar("T", bound="Noise")
 class Noise:
     """ 
         Attributes:
-            model (str): Available options: `ideal`, `harmony`, `harmony-1`, `harmony-2`, `aria-1`, `aria-2`, `forte-1`,
-                `forte-enterprise-1`
+            model (str): Available options: `ideal`, `aria-1`, `aria-2`, `forte-1`, `forte-enterprise-1`
             seed (int | Unset):
      """
 

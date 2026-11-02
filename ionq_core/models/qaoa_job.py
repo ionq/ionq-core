@@ -73,7 +73,7 @@ class QaoaJob:
                 corresponding bitstring, and the current state of the optimization loop. Populated once `processing_status` is
                 `complete`.
             child_job_ids (list[str] | None):
-            shots (int | Unset): `shots` are not included with ideal simulator backend.
+            shots (int | Unset): `shots` are not included with the ideal simulator backend.
             noise (Noise | Unset):
             cost_model (ApiCostModel | Unset): The billing model used for this job. `QCT` for jobs billed on quantum
                 compute time, `2QGE_operations` for jobs billed on two-qubit gate operations.
