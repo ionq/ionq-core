@@ -4,9 +4,9 @@
 
 from typing import Literal
 
-GetBackendBackend = Literal['qpu.forte-1', 'qpu.forte-enterprise-1']
+GetBackendBackend = Literal['qpu.forte-1', 'qpu.forte-enterprise-1', 'qpu.forte-enterprise-3']
 
-GET_BACKEND_BACKEND_VALUES: set[GetBackendBackend] = { 'qpu.forte-1', 'qpu.forte-enterprise-1',  }
+GET_BACKEND_BACKEND_VALUES: set[GetBackendBackend] = { 'qpu.forte-1', 'qpu.forte-enterprise-1', 'qpu.forte-enterprise-3',  }
 
 def check_get_backend_backend(value: str) -> GetBackendBackend:
     if value in GET_BACKEND_BACKEND_VALUES:

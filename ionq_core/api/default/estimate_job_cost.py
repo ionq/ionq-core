@@ -72,6 +72,10 @@ def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Res
 
         return response_200
 
+    if response.status_code == 404:
+        response_404 = cast(Any, None)
+        return response_404
+
     if response.status_code == 429:
         response_429 = cast(Any, None)
         return response_429
@@ -117,7 +121,8 @@ def sync_detailed(
 ) -> Response[Any | GetJobEstimateResponse]:
     """ 
     Args:
-        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`
+        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`,
+            `qpu.forte-enterprise-3`
         type_ (str | Unset):  Default: 'ionq.circuit.v1'.
         qubits (int | Unset):  Default: 25.
         shots (int | Unset):  Default: 1000.
@@ -165,7 +170,8 @@ def sync(
 ) -> Any | GetJobEstimateResponse | None:
     """ 
     Args:
-        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`
+        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`,
+            `qpu.forte-enterprise-3`
         type_ (str | Unset):  Default: 'ionq.circuit.v1'.
         qubits (int | Unset):  Default: 25.
         shots (int | Unset):  Default: 1000.
@@ -208,7 +214,8 @@ async def asyncio_detailed(
 ) -> Response[Any | GetJobEstimateResponse]:
     """ 
     Args:
-        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`
+        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`,
+            `qpu.forte-enterprise-3`
         type_ (str | Unset):  Default: 'ionq.circuit.v1'.
         qubits (int | Unset):  Default: 25.
         shots (int | Unset):  Default: 1000.
@@ -256,7 +263,8 @@ async def asyncio(
 ) -> Any | GetJobEstimateResponse | None:
     """ 
     Args:
-        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`
+        backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`,
+            `qpu.forte-enterprise-3`
         type_ (str | Unset):  Default: 'ionq.circuit.v1'.
         qubits (int | Unset):  Default: 25.
         shots (int | Unset):  Default: 1000.

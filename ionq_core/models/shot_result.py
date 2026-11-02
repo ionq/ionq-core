@@ -12,6 +12,7 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
 from typing import cast
 
 if TYPE_CHECKING:
@@ -31,9 +32,12 @@ class ShotResult:
 
         Attributes:
             registers (ShotRegisters): Per-register bit arrays for one shot, keyed by register name.
+            leakage_bits (list[float] | Unset): Leakage for this shot, one 0 or 1 per executed qubit with 1 where the qubit
+                leaked. Empty for a clean shot; any non-empty array marks the shot as leaked.
      """
 
     registers: ShotRegisters
+    leakage_bits: list[float] | Unset = UNSET
 
 
 
@@ -43,12 +47,20 @@ class ShotResult:
         from ..models.shot_registers import ShotRegisters
         registers = self.registers.to_dict()
 
+        leakage_bits: list[float] | Unset = UNSET
+        if not isinstance(self.leakage_bits, Unset):
+            leakage_bits = self.leakage_bits
+
+
+
 
         field_dict: dict[str, Any] = {}
 
         field_dict.update({
             "registers": registers,
         })
+        if leakage_bits is not UNSET:
+            field_dict["leakage_bits"] = leakage_bits
 
         return field_dict
 
@@ -63,8 +75,12 @@ class ShotResult:
 
 
 
+        leakage_bits = cast(list[float], d.pop("leakage_bits", UNSET))
+
+
         shot_result = cls(
             registers=registers,
+            leakage_bits=leakage_bits,
         )
 
         return shot_result

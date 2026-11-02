@@ -31,7 +31,8 @@ class IonqResultShotsJsonV2:
     records measured bit arrays for every named register.
 
         Example:
-            {'shots': [{'registers': {'output_all': [1, 0]}}, {'registers': {'output_all': [0, 1]}}]}
+            {'shots': [{'registers': {'output_all': [1, 0]}, 'leakage_bits': []}, {'registers': {'output_all': [0, 1]},
+                'leakage_bits': [1, 0]}]}
 
         Attributes:
             shots (list[ShotResult]): Array of shot results, one object per shot.

@@ -37,7 +37,7 @@ class QctrlQaoaJobCreationPayload:
     for more information.
 
         Attributes:
-            backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`
+            backend (str): Available options: `simulator`, `qpu.forte-1`, `qpu.forte-enterprise-1`, `qpu.forte-enterprise-3`
             type_ (QctrlQaoaJobCreationPayloadType):
             input_ (QctrlQaoaJobInput):
             external_settings (QctrlQaoaJobCreationPayloadExternalSettings):
