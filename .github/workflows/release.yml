@@ -39,8 +39,33 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-  publish-pypi:
+  can-i-release:
     needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      id-token: write # federate to octo-sts
+    steps:
+      # Advisory for now, like pact.yml: an outage here never holds a release.
+      - name: Get a token for the contracts repo
+        id: sts
+        continue-on-error: true
+        uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
+        with:
+          domain: octo-sts.gh.ionq.co
+          scope: ionq/pact
+          identity: ionq-core-pact
+      - name: can-i-deploy ${{ github.ref_name }} to prod
+        if: ${{ steps.sts.outcome == 'success' }}
+        continue-on-error: true
+        uses: $/.github/actions/pact-contracts
+        with:
+          token: ${{ steps.sts.outputs.token }}
+          workflow: consumer-can-i-release.yaml
+          release-tag: ${{ github.ref_name }}
+
+  publish-pypi:
+    needs: [build, can-i-release]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment:
@@ -53,7 +78,32 @@ jobs:
         with:
           name: dist
           path: dist/
-      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+
+  record-release:
+    needs: publish-pypi
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      id-token: write # federate to octo-sts
+    steps:
+      # Advisory for now, like pact.yml: recording can be replayed by hand if this fails.
+      - name: Get a token for the contracts repo
+        id: sts
+        continue-on-error: true
+        uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
+        with:
+          domain: octo-sts.gh.ionq.co
+          scope: ionq/pact
+          identity: ionq-core-pact
+      - name: record-release ${{ github.ref_name }} in prod
+        if: ${{ steps.sts.outcome == 'success' }}
+        continue-on-error: true
+        uses: $/.github/actions/pact-contracts
+        with:
+          token: ${{ steps.sts.outputs.token }}
+          workflow: consumer-record-release.yaml
+          release-tag: ${{ github.ref_name }}
 
   github-release:
     needs: publish-pypi

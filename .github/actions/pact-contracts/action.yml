@@ -1,0 +1,141 @@
+name: pact contracts
+description: >-
+  Composite action with no trigger of its own: pact.yml (PR / push checks) and release.yml
+  (release gates) call it via `uses:`. It starts the matching consumer-* workflow in the
+  internal contracts repo (ionq/pact — the suites cannot live in this public repo) for this
+  repo's commit, finds that run by a unique key echoed in its name, re-checks its status
+  until it finishes, and passes or fails with its result. Every wait has a time limit, so a
+  remote run that never starts or finishes fails this step instead of hanging the job.
+
+inputs:
+  token:
+    description: GitHub token with `actions:write` on the target repository (from octo-sts).
+    required: true
+  workflow:
+    description: Receiver workflow to dispatch; the release receivers take `release-tag` and no `branch`.
+    required: false
+    default: consumer-contracts.yaml
+  consumer:
+    description: Suite name on the receiver side (its folder, task, and pacticipant); defaults to this repo's name.
+    required: false
+    default: ${{ github.event.repository.name }}
+  sha:
+    description: Full 40-hex commit SHA under contract.
+    required: false
+    default: ${{ github.event.pull_request.head.sha || github.sha }}
+  branch:
+    description: Branch reported with the commit; sent only when non-empty (the default is empty on tag pushes).
+    required: false
+    default: ${{ github.ref_type != 'tag' && (github.head_ref || github.ref_name) || '' }}
+  release-tag:
+    description: Release tag (vX.Y.Z); sent only when non-empty.
+    required: false
+    default: ""
+  repository:
+    description: Repository hosting the receiver workflows (internal).
+    required: false
+    default: ionq/pact
+  ref:
+    description: Ref of the target repository to run the workflow from.
+    required: false
+    default: main
+  run-key:
+    description: Unique-per-attempt key echoed in the remote run's name, used to find that run.
+    required: false
+    default: ${{ github.event.repository.name }}-${{ github.run_id }}-${{ github.run_attempt }}
+  start-timeout-seconds:
+    description: How long to wait for the dispatched run to appear before failing.
+    required: false
+    default: "120"
+  poll-interval-seconds:
+    description: Seconds between status checks once the run is found.
+    required: false
+    default: "20"
+  wait-timeout-seconds:
+    description: Max seconds for the found run to finish (`timed_out` on expiry); keep below the job's `timeout-minutes`.
+    required: false
+    default: "1500"
+  success-conclusions:
+    description: Comma-separated remote conclusions treated as a passing verdict.
+    required: false
+    default: success,skipped
+
+outputs:
+  run-id:
+    description: Run id of the dispatched remote run (empty if it never appeared).
+    value: ${{ steps.await.outputs.run-id }}
+  run-url:
+    description: URL of the dispatched remote run (empty if it never appeared).
+    value: ${{ steps.await.outputs.run-url }}
+  conclusion:
+    description: Remote conclusion, `timed_out`, or empty if the run never appeared.
+    value: ${{ steps.await.outputs.conclusion }}
+
+runs:
+  using: composite
+  steps:
+    - name: Dispatch, find the run, await its verdict
+      id: await
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        TARGET: ${{ inputs.repository }}
+        WORKFLOW: ${{ inputs.workflow }}
+        TARGET_REF: ${{ inputs.ref }}
+        CONSUMER: ${{ inputs.consumer }}
+        SHA: ${{ inputs.sha }}
+        BRANCH: ${{ inputs.branch }}
+        RELEASE_TAG: ${{ inputs.release-tag }}
+        RUN_KEY: ${{ inputs.run-key }}
+        START_TIMEOUT: ${{ inputs.start-timeout-seconds }}
+        POLL_INTERVAL: ${{ inputs.poll-interval-seconds }}
+        WAIT_TIMEOUT: ${{ inputs.wait-timeout-seconds }}
+        OK_CONCLUSIONS: ${{ inputs.success-conclusions }}
+      run: |
+        # Each receiver declares only the inputs it uses and the dispatch API rejects
+        # undeclared ones, so the optional fields are sent only when set.
+        args=(-f consumer="$CONSUMER" -f sha="$SHA" -f run_key="$RUN_KEY")
+        if [ -n "$BRANCH" ]; then args+=(-f branch="$BRANCH"); fi
+        if [ -n "$RELEASE_TAG" ]; then args+=(-f release_tag="$RELEASE_TAG"); fi
+        gh workflow run "$WORKFLOW" -R "$TARGET" --ref "$TARGET_REF" "${args[@]}"
+
+        # The dispatch returns no run id; the run is found by the correlation key in its name.
+        # Transient API errors must not abort the step (bash -e -o pipefail): keep retrying
+        # until the deadline.
+        run_id=""
+        deadline=$(( $(date +%s) + START_TIMEOUT ))
+        while [ "$(date +%s)" -lt "$deadline" ]; do
+          sleep 5
+          run_id=$(gh run list -R "$TARGET" --workflow "$WORKFLOW" --event workflow_dispatch \
+            --limit 50 --json databaseId,displayTitle \
+            | jq -r --arg key "$RUN_KEY" '[.[] | select(.displayTitle | endswith($key))][0].databaseId // empty' \
+            || true)
+          [ -n "$run_id" ] && break
+        done
+        if [ -z "$run_id" ]; then
+          echo "conclusion=" >> "$GITHUB_OUTPUT"
+          echo "::error::$TARGET did not start a $WORKFLOW run for $RUN_KEY within ${START_TIMEOUT}s"
+          exit 1
+        fi
+        run_url="https://github.com/$TARGET/actions/runs/$run_id"
+        { echo "run-id=$run_id"; echo "run-url=$run_url"; } >> "$GITHUB_OUTPUT"
+        echo "remote run (internal): $run_url"
+
+        # Poll the status only; the remote log stays remote. Tolerate transient API errors.
+        conclusion=timed_out
+        deadline=$(( $(date +%s) + WAIT_TIMEOUT ))
+        while [ "$(date +%s)" -lt "$deadline" ]; do
+          status=$(gh run view "$run_id" -R "$TARGET" --json status --jq .status 2>/dev/null || echo unknown)
+          if [ "$status" = completed ]; then
+            conclusion=$(gh run view "$run_id" -R "$TARGET" --json conclusion --jq .conclusion 2>/dev/null || echo unknown)
+            break
+          fi
+          sleep "$POLL_INTERVAL"
+        done
+        echo "conclusion=$conclusion" >> "$GITHUB_OUTPUT"
+        echo "verdict: $conclusion"
+        case ",$OK_CONCLUSIONS," in
+          *",$conclusion,"*) exit 0 ;;
+        esac
+        echo "::error::$TARGET run concluded '$conclusion': $run_url"
+        exit 1
