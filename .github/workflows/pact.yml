@@ -1,3 +1,6 @@
+# This SDK's consumer-contract (Pact) suites run in an internal IonQ repository; this
+# workflow dispatches them there for the current commit and reports back the verdict.
+# The run links in its log are internal and not visible outside the IonQ org.
 name: Pact — consumer contracts
 
 on:
@@ -15,7 +18,7 @@ permissions: {}
 
 jobs:
   contracts:
-    name: contracts (cloud-pact)
+    name: contracts
     # Fork PRs cannot federate, so they skip.
     if: >-
       github.event_name != 'pull_request' ||
@@ -27,7 +30,7 @@ jobs:
     steps:
       # Advisory for now: neither step can fail the job, so an outage here never holds a PR.
       # To make the verdict blocking, fail the report step below on a non-pass.
-      - name: Get a token for cloud-pact Actions
+      - name: Get a token for the contracts repo
         id: sts
         continue-on-error: true
         uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
@@ -36,11 +39,11 @@ jobs:
           scope: ionq/pact
           identity: ionq-core-pact
 
-      - name: Run in cloud-pact and wait for its verdict
+      - name: Run the contracts check and wait for its verdict
         id: run
         if: ${{ steps.sts.outcome == 'success' }}
         continue-on-error: true
-        uses: $/.github/actions/cloud-pact-contracts
+        uses: $/.github/actions/pact-contracts
         with:
           token: ${{ steps.sts.outputs.token }}
 
@@ -50,4 +53,4 @@ jobs:
           CONCLUSION: ${{ steps.run.outputs.conclusion }}
           RUN_URL: ${{ steps.run.outputs.run-url }}
         run: |
-          echo "::warning::cloud-pact check did not pass (${CONCLUSION:-never started}): ${RUN_URL:-octo-sts federation failed}"
+          echo "::warning::contracts check did not pass (${CONCLUSION:-never started}): ${RUN_URL:-octo-sts federation failed}"

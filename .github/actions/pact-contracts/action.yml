@@ -1,25 +1,22 @@
-name: cloud-pact contracts
+name: pact contracts
 description: >-
-  Dispatch a contracts receiver workflow in cloud-pact for a commit of this repo and wait
-  for its verdict. One receiver exists per call type (check, can-i-release, record-release);
-  `workflow` picks it. Every wait is bounded (start-timeout-seconds, wait-timeout-seconds),
-  so a stuck or never-started remote run fails this step instead of hanging the job.
+  Composite action with no trigger of its own: pact.yml (PR / push checks) and release.yml
+  (release gates) call it via `uses:`. It starts the matching consumer-* workflow in the
+  internal contracts repo (ionq/pact — the suites cannot live in this public repo) for this
+  repo's commit, finds that run by a unique key echoed in its name, re-checks its status
+  until it finishes, and passes or fails with its result. Every wait has a time limit, so a
+  remote run that never starts or finishes fails this step instead of hanging the job.
 
 inputs:
   token:
     description: GitHub token with `actions:write` on the target repository (from octo-sts).
     required: true
   workflow:
-    description: >-
-      Receiver workflow file to dispatch: the default checks a commit (PRs, pushes); the
-      release receivers (`consumer-can-i-release.yaml`, `consumer-record-release.yaml`) take
-      `release-tag` and no `branch`.
+    description: Receiver workflow to dispatch; the release receivers take `release-tag` and no `branch`.
     required: false
     default: consumer-contracts.yaml
   consumer:
-    description: >-
-      Consumer suite in the target repository — its folder, task, and pacticipant name,
-      which must all equal the consumer repo's name (hence the default).
+    description: Suite name on the receiver side (its folder, task, and pacticipant); defaults to this repo's name.
     required: false
     default: ${{ github.event.repository.name }}
   sha:
@@ -27,18 +24,15 @@ inputs:
     required: false
     default: ${{ github.event.pull_request.head.sha || github.sha }}
   branch:
-    description: >-
-      Branch name reported with the commit (`main` on merges). Sent only when non-empty;
-      the default resolves to empty on tag pushes, where there is no branch and the release
-      receivers declare none.
+    description: Branch reported with the commit; sent only when non-empty (the default is empty on tag pushes).
     required: false
     default: ${{ github.ref_type != 'tag' && (github.head_ref || github.ref_name) || '' }}
   release-tag:
-    description: Release tag (vX.Y.Z); sent only when non-empty. The release receivers require it.
+    description: Release tag (vX.Y.Z); sent only when non-empty.
     required: false
     default: ""
   repository:
-    description: Repository hosting the contracts workflow.
+    description: Repository hosting the receiver workflows (internal).
     required: false
     default: ionq/pact
   ref:
@@ -46,7 +40,7 @@ inputs:
     required: false
     default: main
   run-key:
-    description: Correlation key echoed in the remote run name; must be unique per attempt.
+    description: Unique-per-attempt key echoed in the remote run's name, used to find that run.
     required: false
     default: ${{ github.event.repository.name }}-${{ github.run_id }}-${{ github.run_attempt }}
   start-timeout-seconds:
@@ -54,14 +48,11 @@ inputs:
     required: false
     default: "120"
   poll-interval-seconds:
-    description: Seconds between status polls once the run is found.
+    description: Seconds between status checks once the run is found.
     required: false
     default: "20"
   wait-timeout-seconds:
-    description: >-
-      How long to wait for the found run to complete; on expiry the conclusion is
-      `timed_out` and the step fails. Keep it below the calling job's `timeout-minutes`
-      so this step, not the runner, ends the wait.
+    description: Max seconds for the found run to finish (`timed_out` on expiry); keep below the job's `timeout-minutes`.
     required: false
     default: "1500"
   success-conclusions:
@@ -128,7 +119,7 @@ runs:
         fi
         run_url="https://github.com/$TARGET/actions/runs/$run_id"
         { echo "run-id=$run_id"; echo "run-url=$run_url"; } >> "$GITHUB_OUTPUT"
-        echo "remote run: $run_url"
+        echo "remote run (internal): $run_url"
 
         # Poll the status only; the remote log stays remote. Tolerate transient API errors.
         conclusion=timed_out
