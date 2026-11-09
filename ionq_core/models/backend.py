@@ -29,7 +29,7 @@ class Backend:
     """ A backend that you can target your program to run on.
 
         Attributes:
-            average_queue_time (float): Current wait time on the queue for execution. Example: 1181215.
+            average_queue_time (int): Current wait time on the queue for execution, in milliseconds. Example: 1181215.
             backend (str): Specifies target hardware and generation where applies: `simulator`, `qpu.forte-1`, `qpu.forte-
                 enterprise-1`, `qpu.forte-enterprise-3` Example: qpu.forte-1.
             last_updated (str): Last date time the backend status was updated. Example: 2025-06-16T00:00:00Z.
@@ -48,7 +48,7 @@ class Backend:
                 'ms'].
      """
 
-    average_queue_time: float
+    average_queue_time: int
     backend: str
     last_updated: str
     qubits: int
