@@ -63,6 +63,17 @@ probs = get_job_probabilities.sync(uuid=job.id, client=client)
 print(probs.additional_properties)
 ```
 
+Billable targets also report what the job cost. `estimated_cost` is available as soon
+as the job is priced, and `cost` once it completes (free targets such as the simulator
+return neither):
+
+```python
+from ionq_core.api.default import get_job_cost
+
+cost = get_job_cost.sync(uuid=job.id, client=client)
+print(cost.dry_run, cost.estimated_cost, cost.cost)
+```
+
 Each generated endpoint module exposes four callables: `sync`, `sync_detailed`, `asyncio`, and `asyncio_detailed`. The `sync` and `asyncio` variants return the parsed body; the `_detailed` variants return a `Response[T]` with the status code, headers, and parsed body.
 
 For options (`api_key`, `base_url`, `max_retries`, `timeout`, `extension`), error classes, retry behavior, pagination, polling, sessions, and downstream-SDK extension hooks, see the [API reference](https://ionq.github.io/ionq-core/).
